@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <title>Dashboard | Synqad</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #ffffff;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-slate-900">
+
+    <div id="mobile-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
+
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="h-20 flex items-center justify-between px-6 border-b border-slate-800">
+            <div class="text-2xl font-extrabold tracking-tight">
+                Syn<span class="text-emerald-400">q</span>ad
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white text-2xl">&times;</button>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto no-scrollbar py-6 px-4 space-y-2">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-emerald-500/10 text-emerald-400 rounded-xl font-semibold transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                Overview
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl font-medium transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                My Stores
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl font-medium transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                AI Content
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="logOut()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-medium transition text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden">
+        
+        <header class="h-20 md:hidden flex items-center justify-between px-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md z-30">
+            <div class="text-xl font-extrabold tracking-tight">
+                Syn<span class="text-emerald-400">q</span>ad
+            </div>
+            <button onclick="toggleSidebar()" class="p-2 text-slate-300 bg-slate-800 rounded-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </header>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar p-6 md:p-10">
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold mb-1">Welcome back<span id="user-greeting"></span> 👋</h1>
+                    <p class="text-slate-400 text-sm">Here's what's happening with your stores today.</p>
+                </div>
+                <button onclick="openConnectModal()" class="w-full md:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold px-6 py-3 rounded-xl transition shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                    + Connect Store
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="bg-slate-800/40 border border-slate-700 p-6 rounded-2xl flex flex-col justify-center">
+                    <p class="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-2">Connected Stores</p>
+                    <p class="text-4xl font-extrabold text-white" id="stat-stores">0</p>
+                </div>
+                <div class="bg-slate-800/40 border border-slate-700 p-6 rounded-2xl flex flex-col justify-center">
+                    <p class="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-2">Posts Generated</p>
+                    <p class="text-4xl font-extrabold text-white">0</p>
+                </div>
+                <div class="bg-slate-800/40 border border-slate-700 p-6 rounded-2xl flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute right-0 top-0 h-full w-2 bg-emerald-500"></div>
+                    <p class="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-2">Plan Status</p>
+                    <p class="text-2xl font-bold text-emerald-400">Free Trial</p>
+                </div>
+            </div>
+
+            <div id="stores-container" class="bg-slate-800/20 border-2 border-dashed border-slate-700 rounded-3xl p-10 text-center flex flex-col items-center justify-center">
+                <div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">No data available yet</h3>
+                <p class="text-slate-400 max-w-sm mb-6 text-sm">Connect your first Shopify or WooCommerce store to allow our AI to start fetching your products.</p>
+                <button onclick="openConnectModal()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-semibold transition border border-slate-600 mb-4">
+                    Connect Your Store
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="connect-modal" class="fixed inset-0 z-[100] hidden items-end md:items-center justify-center p-0 md:p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border-t md:border border-slate-700 w-full max-w-md p-8 rounded-t-3xl md:rounded-3xl shadow-2xl relative transform transition-transform translate-y-full md:translate-y-0 flex flex-col max-h-[90vh]" id="modal-content">
+            
+            <div class="w-12 h-1.5 bg-slate-700 rounded-full mx-auto mb-6 md:hidden flex-shrink-0"></div>
+
+            <div id="modal-step-1" class="block">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-xl font-bold">Select Platform</h3>
+                    <button onclick="closeConnectModal()" class="text-slate-400 hover:text-white text-2xl hidden md:block">&times;</button>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <button onclick="showForm('Shopify')" class="p-6 border border-slate-700 bg-slate-800/50 rounded-2xl hover:border-emerald-500 hover:bg-emerald-500/10 transition-all flex flex-col items-center group">
+                        <div class="w-12 h-12 bg-slate-700 group-hover:bg-emerald-500 rounded-full flex items-center justify-center mb-3 transition-colors">
+                            <span class="text-2xl">🛍️</span>
+                        </div>
+                        <span class="font-bold text-sm">Shopify</span>
+                    </button>
+                    
+                    <button onclick="showForm('WooCommerce')" class="p-6 border border-slate-700 bg-slate-800/50 rounded-2xl hover:border-emerald-500 hover:bg-emerald-500/10 transition-all flex flex-col items-center group">
+                        <div class="w-12 h-12 bg-slate-700 group-hover:bg-emerald-500 rounded-full flex items-center justify-center mb-3 transition-colors">
+                            <span class="text-2xl">⚙️</span>
+                        </div>
+                        <span class="font-bold text-sm text-center">WooCommerce</span>
+                    </button>
+                </div>
+                <button onclick="closeConnectModal()" class="w-full py-4 text-slate-400 font-semibold hover:text-white transition md:hidden">Cancel</button>
+            </div>
+
+            <div id="modal-step-2" class="hidden flex-col overflow-y-auto no-scrollbar">
+                <div class="flex items-center mb-6">
+                    <button onclick="goBackToStep1()" class="text-slate-400 hover:text-white mr-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </button>
+                    <h3 class="text-xl font-bold" id="form-title">Connect Store</h3>
+                </div>
+                
+                <form id="connect-store-form" class="space-y-4">
+                    <input type="hidden" id="store-platform">
+                    
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Store URL</label>
+                        <input type="url" id="store-url" required placeholder="https://my-store.com" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2" id="key-label">API Key / Consumer Key</label>
+                        <input type="text" id="api-key" required placeholder="ck_xxxxxxxxxxxxxxxxx" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2" id="secret-label">API Secret</label>
+                        <input type="password" id="api-secret" required placeholder="cs_xxxxxxxxxxxxxxxxx" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-all">
+                    </div>
+                    
+                    <button type="submit" id="save-store-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold py-3.5 rounded-xl transition shadow-[0_0_15px_rgba(16,185,129,0.2)] mt-4">
+                        Connect & Sync
+                    </button>
+                </form>
+                <p id="store-msg" class="mt-4 text-sm text-center font-medium"></p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURARE SUPABASE
+        const supabaseUrl = 'https://xuqbusbpxrzgchfizvko.supabase.co'; 
+        const supabaseKey = 'sb_publishable_pv_tlTQbSQgnkIkcsbXn8A_zrE16PHU'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let currentUserId = null;
+
+        // 1. VERIFICARE LOGARE ȘI ÎNCĂRCARE DATE
+        async function checkUser() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = '/index.html';
+            } else {
+                currentUserId = session.user.id;
+                const email = session.user.email;
+                const name = email.split('@')[0];
+                document.getElementById('user-greeting').innerText = ', ' + name.charAt(0).toUpperCase() + name.slice(1);
+                
+                // Încărcăm magazinele imediat ce user-ul e detectat
+                loadMyStores();
+            }
+        }
+        checkUser();
+
+        // 2. FUNCȚIA CARE AFIȘEAZĂ MAGAZINELE ȘI BUTONUL DE SYNC
+        async function loadMyStores() {
+            const { data: shops, error } = await supabaseClient
+                .from('shops')
+                .select('*')
+                .eq('user_id', currentUserId);
+
+            if (error) {
+                console.error("Error fetching stores:", error);
+                return;
+            }
+
+            document.getElementById('stat-stores').innerText = shops.length;
+
+            if (shops.length > 0) {
+                const container = document.getElementById('stores-container');
+                let html = `<div class="w-full text-left"><h3 class="text-xl font-bold mb-6">Your Connected Stores</h3><div class="space-y-4">`;
+
+                shops.forEach(shop => {
+                    html += `
+                        <div class="flex flex-col md:flex-row md:items-center justify-between bg-slate-800/60 p-5 rounded-2xl border border-slate-700 gap-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center text-xl">
+                                    ${shop.platform === 'shopify' ? '🛍️' : '⚙️'}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-lg capitalize">${shop.platform}</p>
+                                    <p class="text-sm text-slate-400">${shop.shop_url}</p>
+                                </div>
+                            </div>
+                            <button onclick="syncProducts('${shop.id}', '${shop.shop_url}', '${shop.api_key}')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold py-2.5 px-6 rounded-xl transition shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                                Sync Products
+                            </button>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
+                container.innerHTML = html;
+                container.className = "bg-slate-800/20 rounded-3xl p-6 md:p-10 flex flex-col";
+            }
+        }
+
+        // 3. LOGICA DE SINCRONIZARE PRODUSE (Aducem datele din Shopify prin Netlify)
+        async function syncProducts(shopId, storeUrl, accessToken) {
+            const btn = event.target;
+            const originalText = btn.innerText;
+            
+            try {
+                btn.innerText = "Syncing...";
+                btn.disabled = true;
+
+                const response = await fetch('/.netlify/functions/sync', {
+                    method: 'POST',
+                    body: JSON.stringify({ storeUrl, token: accessToken })
+                });
+
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+
+                const productsToSave = data.products.map(p => ({
+                    shop_id: shopId,
+                    shopify_product_id: p.id.toString(),
+                    title: p.title,
+                    description: p.body_html || '',
+                    image_url: p.image ? p.image.src : '',
+                    price: p.variants && p.variants.length > 0 ? p.variants[0].price : '0'
+                }));
+
+                const { error: supabaseError } = await supabaseClient
+                    .from('products')
+                    .upsert(productsToSave, { onConflict: 'shop_id, shopify_product_id' });
+
+                if (supabaseError) throw supabaseError;
+
+                alert("Success! Products synced successfully. 🎉");
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // LOGICA UI EXISTENTĂ
+        async function logOut() {
+            await supabaseClient.auth.signOut();
+            window.location.href = '/index.html';
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function openConnectModal() {
+            document.getElementById('connect-modal').classList.replace('hidden', 'flex');
+            setTimeout(() => { document.getElementById('modal-content').classList.remove('translate-y-full'); }, 10);
+        }
+
+        function closeConnectModal() {
+            document.getElementById('modal-content').classList.add('translate-y-full');
+            setTimeout(() => { document.getElementById('connect-modal').classList.replace('flex', 'hidden'); goBackToStep1(); }, 300);
+        }
+
+        function showForm(platform) {
+            document.getElementById('modal-step-1').classList.replace('block', 'hidden');
+            document.getElementById('modal-step-2').classList.replace('hidden', 'flex');
+            document.getElementById('form-title').innerText = 'Connect ' + platform;
+            document.getElementById('store-platform').value = platform.toLowerCase();
+            
+            if(platform === 'Shopify') {
+                document.getElementById('key-label').innerText = "Admin API Access Token";
+                document.getElementById('api-key').placeholder = "shpat_xxxxxxxxxxxxxxxxx";
+                document.getElementById('secret-label').innerText = "API Secret Key";
+            }
+        }
+
+        function goBackToStep1() {
+            document.getElementById('modal-step-2').classList.replace('flex', 'hidden');
+            document.getElementById('modal-step-1').classList.replace('hidden', 'block');
+            document.getElementById('connect-store-form').reset();
+        }
+
+        document.getElementById('connect-store-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('save-store-btn');
+            btn.innerText = "Connecting...";
+            btn.disabled = true;
+
+            const { error } = await supabaseClient
+                .from('shops')
+                .insert([{ 
+                    user_id: currentUserId, 
+                    platform: document.getElementById('store-platform').value, 
+                    shop_url: document.getElementById('store-url').value, 
+                    api_key: document.getElementById('api-key').value, 
+                    api_secret: document.getElementById('api-secret').value 
+                }]);
+
+            if (error) {
+                alert(error.message);
+                btn.innerText = "Try Again";
+                btn.disabled = false;
+            } else {
+                closeConnectModal();
+                loadMyStores(); // Reîncărcăm lista imediat
+            }
+        });
+    </script>
+</body>
+</html>

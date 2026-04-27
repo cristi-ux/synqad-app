@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synqad | Business Social Media on Autopilot</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A; /* Negru Mat */
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.1); border-color: rgba(30, 41, 59, 1); }
+            50% { box-shadow: 0 0 35px rgba(16, 185, 129, 0.4); border-color: rgba(16, 185, 129, 0.8); }
+            100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.1); border-color: rgba(30, 41, 59, 1); }
+        }
+        
+        .hover-pulse:hover {
+            animation: pulse-glow 2s infinite;
+            border-color: #10B981;
+        }
+
+        .hidden-price { display: none; }
+        #auth-modal { backdrop-filter: blur(8px); }
+    </style>
+</head>
+<body class="relative overflow-x-hidden antialiased">
+
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+    <nav class="relative z-50 border-b border-slate-800/60 bg-slate-900/50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-extrabold tracking-tight cursor-pointer">
+                Syn<span class="text-emerald-400">q</span>ad
+            </div>
+            <div class="space-x-8 text-sm font-medium text-slate-300 hidden md:flex">
+                <a href="#features" class="hover:text-white transition">Platform</a>
+                <a href="#destinations" class="hover:text-white transition">Destinations</a>
+                <a href="#pricing" class="hover:text-white transition">Pricing</a>
+            </div>
+            <div>
+                <button onclick="toggleAuthModal()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-lg transition text-sm">
+                    Get Access
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-32 text-center">
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tighter">
+            E-commerce Social Media. <br/>
+            <span class="text-emerald-400">High-Growth.</span> Autopilot.
+        </h1>
+        <p class="text-lg md:text-xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+            Automatically transform your shop's inventory into high-converting social media posts. Connect Shopify or WooCommerce. Let AI drive profit.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button onclick="toggleAuthModal()" class="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-xl transition duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                Start Automating
+            </button>
+            <a href="#features" class="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl transition duration-300 border border-slate-700">
+                Explore Platform
+            </a>
+        </div>
+    </section>
+
+    <section id="features" class="py-24 bg-slate-900 relative z-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">Engineered for Revenue</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">The entire pipeline from your store's database to your customer's social feed, handled with zero human intervention.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-slate-800/40 border border-slate-700 p-8 rounded-2xl hover:border-emerald-500/50 transition duration-300">
+                    <div class="text-emerald-400 text-sm font-bold uppercase tracking-widest mb-4">01. Synchronization</div>
+                    <h3 class="text-xl font-bold mb-3">Live API Connection</h3>
+                    <p class="text-slate-400 leading-relaxed">Synqad reads your Shopify or WooCommerce database in real-time. It knows your prices, your discounts, and automatically skips out-of-stock items.</p>
+                </div>
+                <div class="bg-slate-800/40 border border-slate-700 p-8 rounded-2xl hover:border-emerald-500/50 transition duration-300">
+                    <div class="text-emerald-400 text-sm font-bold uppercase tracking-widest mb-4">02. Intelligence</div>
+                    <h3 class="text-xl font-bold mb-3">Contextual Copywriting</h3>
+                    <p class="text-slate-400 leading-relaxed">Our AI analyzes your product's features and crafts compelling, conversion-focused captions tailored to your specific brand voice.</p>
+                </div>
+                <div class="bg-slate-800/40 border border-slate-700 p-8 rounded-2xl hover:border-emerald-500/50 transition duration-300">
+                    <div class="text-emerald-400 text-sm font-bold uppercase tracking-widest mb-4">03. Distribution</div>
+                    <h3 class="text-xl font-bold mb-3">Omnichannel Publishing</h3>
+                    <p class="text-slate-400 leading-relaxed">Posts are scheduled and published automatically to your connected social channels at peak engagement hours. Set it up once and forget it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="destinations" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold tracking-tight mb-12">Supported Destinations</h2>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="px-8 py-4 border border-slate-700 rounded-lg text-lg font-semibold tracking-wide text-slate-300 hover:text-white hover:border-slate-500 transition cursor-default">FACEBOOK</div>
+                <div class="px-8 py-4 border border-slate-700 rounded-lg text-lg font-semibold tracking-wide text-slate-300 hover:text-white hover:border-slate-500 transition cursor-default">INSTAGRAM</div>
+                <div class="px-8 py-4 border border-slate-700 rounded-lg text-lg font-semibold tracking-wide text-slate-300 hover:text-white hover:border-slate-500 transition cursor-default">TIKTOK</div>
+                <div class="px-8 py-4 border border-slate-700 rounded-lg text-lg font-semibold tracking-wide text-slate-300 hover:text-white hover:border-slate-500 transition cursor-default">PINTEREST</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-24 bg-slate-900 relative z-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-6">Transparent Pricing</h2>
+                
+                <div class="flex items-center justify-center space-x-4 mt-8">
+                    <span class="text-slate-400 font-medium" id="label-monthly">Monthly</span>
+                    <button id="billing-toggle" class="relative inline-flex h-7 w-14 items-center rounded-full bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900" onclick="togglePricing()">
+                        <span id="toggle-knob" class="inline-block h-5 w-5 transform rounded-full bg-emerald-400 transition-transform translate-x-1"></span>
+                    </button>
+                    <span class="text-white font-medium" id="label-annual">Annually <span class="text-emerald-400 text-sm ml-1">(Save 20%)</span></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                
+                <div class="bg-slate-800/30 border border-slate-700 rounded-2xl p-8 flex flex-col hover-pulse transition-all duration-300">
+                    <h3 class="text-xl font-bold mb-2">Start</h3>
+                    <p class="text-slate-400 text-sm mb-6">Perfect for small shops testing the waters.</p>
+                    <div class="text-4xl font-extrabold mb-6">
+                        <span class="price-monthly hidden-price">$29</span>
+                        <span class="price-annual">$23</span>
+                        <span class="text-lg text-slate-500 font-normal">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-1 text-slate-300 text-sm">
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> 1 Store Connection</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> 15 AI Generations / month</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> Facebook & Instagram</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> Standard AI Voice</li>
+                    </ul>
+                    <button onclick="toggleAuthModal()" class="w-full py-3 border border-slate-600 hover:bg-slate-700 rounded-xl font-semibold transition">Select Start</button>
+                </div>
+
+                <div class="bg-slate-800/60 border border-emerald-500/50 rounded-2xl p-8 flex flex-col relative transform md:-translate-y-4 hover-pulse transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-slate-900 text-xs font-bold uppercase tracking-widest py-1 px-3 rounded-full">
+                        Most Popular
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Grow</h3>
+                    <p class="text-slate-400 text-sm mb-6">For expanding brands that need daily presence.</p>
+                    <div class="text-4xl font-extrabold mb-6 text-emerald-400">
+                        <span class="price-monthly hidden-price">$69</span>
+                        <span class="price-annual">$55</span>
+                        <span class="text-lg text-slate-500 font-normal">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-1 text-slate-200 text-sm">
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> 3 Store Connections</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> 60 AI Generations / month</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> All Social Platforms</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> Custom Brand Voices</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> Review & Edit Grace Period</li>
+                    </ul>
+                    <button onclick="toggleAuthModal()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-xl font-bold transition shadow-lg">Select Grow</button>
+                </div>
+
+                <div class="bg-slate-800/30 border border-slate-700 rounded-2xl p-8 flex flex-col hover-pulse transition-all duration-300">
+                    <h3 class="text-xl font-bold mb-2">Scale</h3>
+                    <p class="text-slate-400 text-sm mb-6">Unlimited power for agencies and large catalogs.</p>
+                    <div class="text-4xl font-extrabold mb-6">
+                        <span class="price-monthly hidden-price">$149</span>
+                        <span class="price-annual">$119</span>
+                        <span class="text-lg text-slate-500 font-normal">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-1 text-slate-300 text-sm">
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> Unlimited Stores</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> 500 AI Generations / month</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> Centralized Agency Dashboard</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> Advanced Analytics</li>
+                        <li class="flex items-start"><span class="text-emerald-400 mr-2">✓</span> Priority Support</li>
+                    </ul>
+                    <button onclick="toggleAuthModal()" class="w-full py-3 border border-slate-600 hover:bg-slate-700 rounded-xl font-semibold transition">Select Scale</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-slate-800 bg-slate-900 pt-16 pb-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="text-2xl font-extrabold tracking-tight mb-4">
+                        Syn<span class="text-emerald-400">q</span>ad
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        The infrastructure for automated e-commerce growth. Built for modern brands.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4 tracking-wide uppercase text-xs">Product</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-emerald-400 transition">Integrations</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition">Pricing</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition">Changelog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4 tracking-wide uppercase text-xs">Resources</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-emerald-400 transition">Documentation</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition">API Reference</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4 tracking-wide uppercase text-xs">Legal</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-emerald-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition">Terms of Service</a></li>
+                        <li><a href="mailto:contact@synqad.com" class="text-emerald-500 hover:text-emerald-400 transition font-semibold">contact@synqad.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+                <p>&copy; 2026 Synqad Technologies. All rights reserved.</p>
+                <div class="mt-4 md:mt-0">
+                    Operated securely in the Cloud.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="auth-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-md p-8 rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.1)] relative">
+            <div class="flex justify-between items-center mb-8">
+                <div class="text-2xl font-extrabold tracking-tight">
+                    Syn<span class="text-emerald-400">q</span>ad
+                </div>
+                <button onclick="toggleAuthModal()" class="text-slate-400 hover:text-white text-2xl transition">&times;</button>
+            </div>
+            <form id="auth-form" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Email Address</label>
+                    <input type="email" id="auth-email" required placeholder="name@company.com" 
+                           class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Password</label>
+                    <input type="password" id="auth-password" required placeholder="••••••••" 
+                           class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-all">
+                </div>
+                <button type="submit" id="auth-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold py-3.5 rounded-xl transition shadow-[0_0_15px_rgba(16,185,129,0.2)] mt-2">
+                    Continue to Dashboard
+                </button>
+            </form>
+            <p id="auth-msg" class="mt-4 text-sm text-center font-medium"></p>
+        </div>
+    </div>
+
+    <script>
+        let isAnnual = true; 
+
+        function togglePricing() {
+            isAnnual = !isAnnual;
+            const knob = document.getElementById('toggle-knob');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelAnnual = document.getElementById('label-annual');
+            const monthlyPrices = document.querySelectorAll('.price-monthly');
+            const annualPrices = document.querySelectorAll('.price-annual');
+
+            if (isAnnual) {
+                knob.classList.remove('translate-x-1');
+                knob.classList.add('translate-x-8');
+                labelAnnual.classList.add('text-white');
+                labelAnnual.classList.remove('text-slate-400');
+                labelMonthly.classList.add('text-slate-400');
+                labelMonthly.classList.remove('text-white');
+                monthlyPrices.forEach(el => el.classList.add('hidden-price'));
+                annualPrices.forEach(el => el.classList.remove('hidden-price'));
+            } else {
+                knob.classList.remove('translate-x-8');
+                knob.classList.add('translate-x-1');
+                labelMonthly.classList.add('text-white');
+                labelMonthly.classList.remove('text-slate-400');
+                labelAnnual.classList.add('text-slate-400');
+                labelAnnual.classList.remove('text-white');
+                annualPrices.forEach(el => el.classList.add('hidden-price'));
+                monthlyPrices.forEach(el => el.classList.remove('hidden-price'));
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const knob = document.getElementById('toggle-knob');
+            if(isAnnual) {
+                knob.classList.add('translate-x-8');
+                knob.classList.remove('translate-x-1');
+            }
+        });
+
+        // Configurare Supabase PENTRU INDEX (Datele tale)
+        const supabaseUrl = 'https://xuqbusbpxrzgchfizvko.supabase.co'; 
+        const supabaseKey = 'sb_publishable_pv_tlTQbSQgnkIkcsbXn8A_zrE16PHU'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        function toggleAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        document.getElementById('auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const msg = document.getElementById('auth-msg');
+            const btn = document.getElementById('auth-btn');
+
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            const { data, error } = await supabaseClient.auth.signUp({ email, password });
+
+            if (error) {
+                const { error: loginError } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (loginError) {
+                    msg.innerText = loginError.message;
+                    msg.className = "mt-4 text-sm text-center text-red-400";
+                    btn.innerText = "Try Again";
+                    btn.disabled = false;
+                } else {
+                    msg.innerText = "Success! Redirecting...";
+                    msg.className = "mt-4 text-sm text-center text-emerald-400";
+                    setTimeout(() => window.location.href = '/dashboard.html', 1500);
+                }
+            } else {
+                msg.innerText = "Success! Redirecting...";
+                msg.className = "mt-4 text-sm text-center text-emerald-400";
+                setTimeout(() => window.location.href = '/dashboard.html', 1500);
+            }
+        });
+    </script>
+</body>
+</html>
